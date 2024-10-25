@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SD3.5 Style Test Gallery</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .intro {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            padding: 20px 0;
+        }
+        .gallery-item {
+            background-color: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .gallery-item img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+        .gallery-item .caption {
+            padding: 15px;
+        }
+        .gallery-item .style-name {
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+        .gallery-item .prompt {
+            font-style: italic;
+            font-size: 0.9em;
+            color: #666;
+        }
+        .pagination {
+            text-align: center;
+            padding: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="intro">
+        <h1>SD3.5 Style Test Gallery</h1>
+        <p>This gallery showcases various artistic styles implemented in Stable Diffusion 3.5 Large. Each image demonstrates a unique style application, accompanied by the prompt used to generate it.</p>
+        <p>The collection includes over 140 different styles, ranging from traditional art forms to modern digital techniques. Each style demonstrates the capabilities of SD3.5 in interpreting and applying various artistic approaches.</p>
+    </div>
+
+    <div id="imageGallery" class="gallery">
+        <!-- Gallery items will be dynamically loaded here -->
+    </div>
+
+    <script>
+        // Function to load and display gallery items
+        async function loadGallery() {
+            const gallery = document.getElementById('imageGallery');
+            
+            // Add your image loading logic here
+            // You'll need to create a list of style names and load corresponding .png and .txt files
+            
+            // Example of how to create a gallery item:
+            /*
+            const item = document.createElement('div');
+            item.className = 'gallery-item';
+            item.innerHTML = `
+                <img src="path/to/image.png" alt="Style Name">
+                <div class="caption">
+                    <div class="style-name">Style Name</div>
+                    <div class="prompt">Prompt text here</div>
+                </div>
+            `;
+            gallery.appendChild(item);
+            */
+        }
+
+        // Load gallery when page loads
+        window.addEventListener('load', loadGallery);
+    </script>
+</body>
+</html>
