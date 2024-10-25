@@ -3,14 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SD3.5 Style Test Gallery</title>
+    <title>SD3.5L Style Test Gallery</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
             max-width: 1200px;
             margin: 0 auto;
             padding: 20px;
             background-color: #f5f5f5;
+            line-height: 1.6;
         }
         .intro {
             background-color: white;
@@ -30,6 +31,10 @@
             border-radius: 8px;
             overflow: hidden;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            transition: transform 0.2s;
+        }
+        .gallery-item:hover {
+            transform: translateY(-5px);
         }
         .gallery-item img {
             width: 100%;
@@ -42,15 +47,15 @@
         .gallery-item .style-name {
             font-weight: bold;
             margin-bottom: 8px;
+            font-size: 1.1em;
         }
         .gallery-item .prompt {
             font-style: italic;
             font-size: 0.9em;
             color: #666;
         }
-        .pagination {
-            text-align: center;
-            padding: 20px 0;
+        h1 {
+            margin-top: 0;
         }
     </style>
 </head>
@@ -66,26 +71,79 @@
     </div>
 
     <script>
-        // Function to load and display gallery items
+        async function fetchPrompt(style) {
+            try {
+                const response = await fetch(`gallery-assets/${style}.txt`);
+                if (!response.ok) throw new Error('Failed to fetch prompt');
+                const text = await response.text();
+                return text.trim();
+            } catch (error) {
+                console.error(`Error loading prompt for ${style}:`, error);
+                return 'Prompt not available';
+            }
+        }
+
         async function loadGallery() {
             const gallery = document.getElementById('imageGallery');
             
-            // Add your image loading logic here
-            // You'll need to create a list of style names and load corresponding .png and .txt files
-            
-            // Example of how to create a gallery item:
-            /*
-            const item = document.createElement('div');
-            item.className = 'gallery-item';
-            item.innerHTML = `
-                <img src="path/to/image.png" alt="Style Name">
-                <div class="caption">
-                    <div class="style-name">Style Name</div>
-                    <div class="prompt">Prompt text here</div>
-                </div>
-            `;
-            gallery.appendChild(item);
-            */
+            // List of styles from your file structure
+            const styles = [
+                '16-bitPixelArt', '3DModeling', '8-bitPixelArt', 'Aboriginal', 
+                'AbstractExpressionism', 'AcrylicPainting', 'AerialPhotography', 
+                'AfricanArt', 'Airbrush', 'Anime', 'ArchitecturalPhotography', 
+                'ArtBrut', 'ArtDeco', 'ArtNouveau', 'ASCIIArt', 'Assemblage', 
+                'Astrophotography', 'Baroque', 'Batik', 'Bauhaus', 'BlackandWhitePhotography',
+                'Bokeh', 'Byzantine', 'Calligraphy', 'Celtic', 'CGI', 'CharcoalDrawing',
+                'Classicism', 'Collage', 'ColorPencil', 'ConceptArt', 'Constructivism',
+                'Cubism', 'Cyanotype', 'Dadaism', 'DeStijl', 'DigitalArt', 'DigitalGlitchArt',
+                'DocumentaryPhotography', 'DoubleExposure', 'Duotone', 'Editorial', 'Encaustic',
+                'Etching', 'Expressionism', 'FashionIllustration', 'FashionPhotography',
+                'Fauvism', 'FluidArt', 'FolkArt', 'FoodPhotography', 'FoundObjectArt',
+                'GameArt', 'GlassArt', 'Gothic', 'Gouache', 'Graffiti', 'GraphiteDrawing',
+                'HDR', 'HighContrast', 'HolographicArt', 'IconDesign', 'Impressionism',
+                'Infographic', 'InfraredPhotography', 'InkWash', 'InstallationArt',
+                'IslamicArt', 'Isometric', 'JapaneseUkiyo-e', 'KineticArt', 'LandArt',
+                'LandscapePhotography', 'LightArt', 'LightLeaks', 'LightPainting',
+                'Linocut', 'Lithography', 'Lomography', 'LongExposure', 'LowPoly',
+                'MacroPhotography', 'Manga', 'MarbleArt', 'MaterialDesign', 'Metalwork',
+                'Minimalism', 'MixedMedia', 'Modernism', 'Mosaic', 'MotionGraphics',
+                'Mughal', 'MultipleExposure', 'NaiveArt', 'NativeAmerican', 'Neo-Classical',
+                'NetArt', 'NightPhotography', 'OilPainting', 'PaperArt', 'Pastel',
+                'PenandInk', 'PerformanceArt', 'PersianMiniature', 'PixelArt', 'PopArt',
+                'PortraitPhotography', 'Post-Impressionism', 'Precisionism', 'Primitivism',
+                'Printmaking', 'Pyrography', 'Quilling', 'Rajasthani', 'Realism', 'Rococo',
+                'Romanticism', 'Scratchboard', 'ScreenPrinting', 'Sculpture', 'SelectiveColor',
+                'Sepia', 'Solarization', 'StreetArt', 'StreetPhotography', 'StringArt',
+                'Surrealism', 'Symbolism', 'TechnicalIllustration', 'Tempera', 'TextileArt',
+                'Thangka', 'Tibetan', 'Tilt-shift', 'Time-lapsePhotography', 'Tonalism',
+                'UI-UXDesign', 'UnderwaterPhotography', 'VectorArt', 'Victorian', 'VideoArt',
+                'VintageEffect', 'VoxelArt', 'Watercolor', 'WireArt', 'WoodblockPrinting',
+                'Woodburning'
+            ];
+
+            // Create and append gallery items
+            for (const style of styles) {
+                const prompt = await fetchPrompt(style);
+                
+                const item = document.createElement('div');
+                item.className = 'gallery-item';
+                
+                // Format the style name for display (e.g., "ArtDeco" -> "Art Deco")
+                const displayName = style
+                    .replace(/([A-Z])/g, ' $1') // Add space before capital letters
+                    .replace(/^./, str => str.toUpperCase()) // Capitalize first letter
+                    .trim();
+
+                item.innerHTML = `
+                    <img src="gallery-assets/${style}.png" alt="${displayName}" loading="lazy">
+                    <div class="caption">
+                        <div class="style-name">${displayName}</div>
+                        <div class="prompt">${prompt}</div>
+                    </div>
+                `;
+                
+                gallery.appendChild(item);
+            }
         }
 
         // Load gallery when page loads
